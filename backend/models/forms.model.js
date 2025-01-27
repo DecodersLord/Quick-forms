@@ -19,10 +19,11 @@ const formFieldSchema = new mongoose.Schema({
 const formSchema = new mongoose.Schema({
     formName: { type: String, required: true },
     description: String,
+    creator: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
     fields: { type: [formFieldSchema], required: true },
     createdAt: { type: Date, default: Date.now },
     updatedAt: { type: Date, default: Date.now },
 });
 
 const Form = mongoose.model("Form", formSchema);
-module.exports = Form;
+export default Form;
