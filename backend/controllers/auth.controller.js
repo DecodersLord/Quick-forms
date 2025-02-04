@@ -32,6 +32,7 @@ export const signup = async (req, res) => {
         }
     } catch (error) {
         console.log(error);
+        res.status(500).json({ error: "Internal server error" });
     }
 };
 
@@ -41,24 +42,24 @@ export const login = async (req, res) => {
 
         const user = await User.findOne({ email });
 
-        if (!user) {
-            return res.status(400).json({ message: "User not found" });
-        }
-
         const isPasswordValid = await bcrypt.compare(
             password,
             user?.password || ""
         );
 
-        if (!isPasswordValid) {
-            return res.status(400).json({ message: "Invalid password" });
+        if (!user || !isPasswordValid) {
+            return res.status(400).json({ error: "Invalid email or password" });
         }
 
         generateTokenAndSetCookie(user._id, res);
 
-        res.status(200).json({ message: "Login successful" });
+        res.status(200).json({
+            _id: user._id,
+            email: user.email,
+        });
     } catch (error) {
         console.log(error);
+        res.status(500).json({ error: "Internal server error" });
     }
 };
 
@@ -68,5 +69,6 @@ export const logout = async (req, res) => {
         res.status(200).json({ message: "Logout successful" });
     } catch (error) {
         console.log(error);
+        res.status(500).json({ error: "Internal server error" });
     }
 };
