@@ -22,6 +22,7 @@ function useLogout() {
             }
 
             localStorage.removeItem("form-app-user");
+            localStorage.removeItem("canvasFields");
             setAuthUser(null);
         } catch (error) {
             toast.error(error.message);
