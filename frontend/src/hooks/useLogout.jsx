@@ -21,7 +21,7 @@ function useLogout() {
                 throw new Error(data.error);
             }
 
-            localStorage.removeItem("chat-app-user");
+            localStorage.removeItem("form-app-user");
             setAuthUser(null);
         } catch (error) {
             toast.error(error.message);
