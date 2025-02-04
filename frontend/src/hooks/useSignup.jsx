@@ -33,7 +33,7 @@ const useSignup = () => {
                 throw new Error(data.error);
             }
             //localstorage
-            localStorage.setItem("chat-app-user", JSON.stringify(data));
+            localStorage.setItem("form-app-user", JSON.stringify(data));
             //context
             setAuthUser(data);
         } catch (error) {
