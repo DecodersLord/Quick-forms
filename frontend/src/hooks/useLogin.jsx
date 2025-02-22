@@ -12,7 +12,7 @@ function useLogin() {
             email,
             password,
         });
-        console.log(email, password);
+
         if (!isSuccess) return;
         setLoading(true);
 
@@ -27,8 +27,9 @@ function useLogin() {
             });
 
             const data = await res.json();
-            if (data.error) {
-                throw new Error(data.error);
+
+            if (!res.ok) {
+                throw new Error(data.message || "something went wrong");
             }
 
             //localstorage
@@ -36,7 +37,7 @@ function useLogin() {
             //context
             setAuthUser(data);
         } catch (error) {
-            console.log("Here " + error);
+            console.log(error);
             toast.error(error.message);
         } finally {
             setLoading(false);

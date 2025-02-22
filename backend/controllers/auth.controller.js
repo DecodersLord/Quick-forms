@@ -1,8 +1,9 @@
 import User from "../models/user.model.js";
 import bcrypt from "bcryptjs";
 import generateTokenAndSetCookie from "../utils/generateToken.js";
+import customError from "../utils/customError.js";
 
-export const signup = async (req, res) => {
+export const signup = async (req, res, next) => {
     try {
         const { name, email, password, confirmPassword } = req.body;
 
@@ -13,9 +14,7 @@ export const signup = async (req, res) => {
         const user = await User.findOne({ email });
 
         if (user) {
-            return res
-                .status(201)
-                .json({ message: "User already exists with this email" });
+            throw new customError(400, "User already exists");
         }
 
         const hashedPassword = await bcrypt.hash(password, 10);
@@ -28,15 +27,14 @@ export const signup = async (req, res) => {
 
             res.status(200).json({ _id: newUser._id, email: newUser.email });
         } else {
-            res.status(400).json({ message: "Failed to create user" });
+            throw new customError(400, "Failed to create user");
         }
     } catch (error) {
-        console.log(error);
-        res.status(500).json({ error: "Internal server error" });
+        next(error);
     }
 };
 
-export const login = async (req, res) => {
+export const login = async (req, res, next) => {
     try {
         const { email, password } = req.body;
 
@@ -48,7 +46,7 @@ export const login = async (req, res) => {
         );
 
         if (!user || !isPasswordValid) {
-            return res.status(400).json({ error: "Invalid email or password" });
+            throw new customError(400, "Invalid email or password");
         }
 
         generateTokenAndSetCookie(user._id, res);
@@ -58,8 +56,7 @@ export const login = async (req, res) => {
             email: user.email,
         });
     } catch (error) {
-        console.log(error);
-        res.status(500).json({ error: "Internal server error" });
+        next(error);
     }
 };
 
@@ -69,6 +66,6 @@ export const logout = async (req, res) => {
         res.status(200).json({ message: "Logout successful" });
     } catch (error) {
         console.log(error);
-        res.status(500).json({ error: "Internal server error" });
+        throw new customError(error.status || 500, error.message);
     }
 };

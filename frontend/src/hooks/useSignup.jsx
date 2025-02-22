@@ -29,15 +29,16 @@ const useSignup = () => {
                 }),
             });
             const data = await res.json();
-            if (data.error) {
-                throw new Error(data.error);
+
+            if (!res.ok) {
+                throw new Error(data.message || "something went wrong");
             }
             //localstorage
             localStorage.setItem("form-app-user", JSON.stringify(data));
             //context
             setAuthUser(data);
         } catch (error) {
-            toast.error(error);
+            toast.error(error.message);
         } finally {
             setLoading(false);
         }
@@ -49,7 +50,6 @@ const useSignup = () => {
 export default useSignup;
 
 function handleInputValidation({ name, email, password, confirmPassword }) {
-    console.log("here checking inputs");
     if (
         name === "" ||
         email === "" ||
