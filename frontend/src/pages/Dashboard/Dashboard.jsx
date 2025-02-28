@@ -26,7 +26,7 @@ function Dashboard() {
                                     ? "Start creating a new form."
                                     : "Create a form to get started.",
                         }}
-                        isCreateNew={forms.length > 0 ? false : true}
+                        isCreateNew={true}
                     />
                 )}
 
