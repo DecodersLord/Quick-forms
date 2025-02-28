@@ -31,6 +31,9 @@ const Login = () => {
                         onSubmit={handleSubmit}
                     >
                         <div className="h-2 bg-accent rounded-t-md " />
+                        <span className="flex content-centerborder p-2 text-sm border-accent border-2 justify-center">
+                            Use 'testuser@test.com' and '123456' as password
+                        </span>
                         <div className="px-8 py-6 ">
                             <label className="block"> Email </label>
                             <input
